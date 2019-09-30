@@ -21,9 +21,9 @@ var/datum/species/shapeshifter/promethean/prometheans
 	hunger_factor =    0.2
 	reagent_tag =      IS_SLIME
 	mob_size =         MOB_MEDIUM
-	bump_flag =        SLIME
-	swap_flags =       MONKEY|SLIME|SIMPLE_ANIMAL
-	push_flags =       MONKEY|SLIME|SIMPLE_ANIMAL
+	bump_flag =        SLIME|MONKEY|HUMAN
+	swap_flags =       MONKEY|SLIME|SIMPLE_ANIMAL|HUMAN
+	push_flags =       MONKEY|SLIME|SIMPLE_ANIMAL|HUMAN
 	flags =            NO_SCAN | NO_SLIP | NO_MINOR_CUT | NO_HALLUCINATION | NO_INFECT
 	appearance_flags = HAS_SKIN_COLOR | HAS_EYE_COLOR | HAS_HAIR_COLOR | RADIATION_GLOWS | HAS_UNDERWEAR
 	spawn_flags		 = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED
@@ -113,10 +113,19 @@ var/datum/species/shapeshifter/promethean/prometheans
 	prometheans = src
 
 /datum/species/shapeshifter/promethean/equip_survival_gear(var/mob/living/carbon/human/H)
-	var/boxtype = pick(typesof(/obj/item/weapon/storage/toolbox/lunchbox))
+//TFF 18/4/19: Add a proper list of randomly chosen lunchboxes
+	var/boxtype = pick(list(/obj/item/weapon/storage/toolbox/lunchbox,
+							/obj/item/weapon/storage/toolbox/lunchbox/heart,
+							/obj/item/weapon/storage/toolbox/lunchbox/cat,
+							/obj/item/weapon/storage/toolbox/lunchbox/nt,
+							/obj/item/weapon/storage/toolbox/lunchbox/mars,
+							/obj/item/weapon/storage/toolbox/lunchbox/cti,
+							/obj/item/weapon/storage/toolbox/lunchbox/nymph,
+							/obj/item/weapon/storage/toolbox/lunchbox/syndicate))	//Only pick the empty types
 	var/obj/item/weapon/storage/toolbox/lunchbox/L = new boxtype(get_turf(H))
 	var/mob/living/simple_animal/mouse/mouse = new (L)
 	var/obj/item/weapon/holder/holder = new (L)
+	holder.held_mob = mouse //TFF 18/4/19: Make Prommies hold a mouse on spawning.
 	mouse.forceMove(holder)
 	holder.sync(mouse)
 	if(H.backbag == 1)
